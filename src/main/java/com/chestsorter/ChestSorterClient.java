@@ -74,14 +74,21 @@ public class ChestSorterClient implements ClientModInitializer {
 
     /** Основной инвентарь игрока (27 слотов, без хотбара и брони). */
     private static List<Slot> playerSlots(ScreenHandler handler) {
-        List<Slot> result = new ArrayList<>();
+        List<Slot> all = new ArrayList<>();
         for (Slot slot : handler.slots) {
             if (slot.inventory instanceof PlayerInventory) {
-                int index = slot.getIndex();
-                if (index >= 9 && index <= 35) {
-                    result.add(slot);
-                }
+                all.add(slot);
             }
+        }
+        List<Slot> result = new ArrayList<>();
+        if (handler instanceof PlayerScreenHandler) {
+            // В окне инвентаря основной инвентарь - слоты 9..35.
+            for (Slot slot : all) {
+                if (slot.id >= 9 && slot.id <= 35) result.add(slot);
+            }
+        } else {
+            // В окне контейнера сначала идут 27 слотов инвентаря, потом 9 слотов хотбара.
+            result.addAll(all.subList(0, Math.min(27, all.size())));
         }
         return result;
     }

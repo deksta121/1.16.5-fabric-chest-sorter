@@ -38,6 +38,11 @@ public final class Sorter {
         return ta.compareTo(tb);
     };
 
+    /** Один и тот же предмет с одинаковым NBT (счётчик не учитывается). */
+    static boolean canCombine(ItemStack a, ItemStack b) {
+        return ItemStack.areItemsEqual(a, b) && ItemStack.areTagsEqual(a, b);
+    }
+
     private static int groupIndex(ItemStack stack) {
         ItemGroup group = stack.getItem().getGroup();
         return group == null ? Integer.MAX_VALUE : group.getIndex();
@@ -71,7 +76,7 @@ public final class Sorter {
 
             for (int j = i + 1; j < n; j++) {
                 ItemStack source = slots.get(j).getStack();
-                if (source.isEmpty() || !ItemStack.canCombine(target, source)) continue;
+                if (source.isEmpty() || !canCombine(target, source)) continue;
 
                 click(ctx, slots.get(j));              // берём стак из j
                 click(ctx, slots.get(i));              // докладываем в i
@@ -104,7 +109,7 @@ public final class Sorter {
         ItemStack sa = a.getStack();
         ItemStack sb = b.getStack();
         // Одинаковые стаки при клике слились бы, а не поменялись местами.
-        if (!sa.isEmpty() && !sb.isEmpty() && ItemStack.canCombine(sa, sb)) return;
+        if (!sa.isEmpty() && !sb.isEmpty() && canCombine(sa, sb)) return;
 
         if (sa.isEmpty()) {
             click(ctx, b);
