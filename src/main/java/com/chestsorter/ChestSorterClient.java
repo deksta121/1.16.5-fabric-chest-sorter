@@ -5,13 +5,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.Generic3x3ContainerScreenHandler;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.HopperScreenHandler;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ShulkerBoxScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -39,17 +37,6 @@ public class ChestSorterClient implements ClientModInitializer {
                         () -> containerSlots(handler),
                         () -> acc.chestsorter$getX() + acc.chestsorter$getBackgroundWidth() - BTN - 6,
                         () -> acc.chestsorter$getY() + 4);
-
-                // Вторая кнопка - над инвентарём игрока.
-                addButton(hs, acc, "Отсортировать инвентарь",
-                        () -> playerSlots(handler),
-                        () -> acc.chestsorter$getX() + acc.chestsorter$getBackgroundWidth() - BTN - 6,
-                        () -> acc.chestsorter$getY() + acc.chestsorter$getBackgroundHeight() - 96);
-            } else if (screen instanceof InventoryScreen && handler instanceof PlayerScreenHandler) {
-                addButton(hs, acc, "Отсортировать инвентарь",
-                        () -> playerSlots(handler),
-                        () -> acc.chestsorter$getX() + acc.chestsorter$getBackgroundWidth() - BTN - 6,
-                        () -> acc.chestsorter$getY() + 70);
             }
         });
     }
@@ -68,27 +55,6 @@ public class ChestSorterClient implements ClientModInitializer {
             if (!(slot.inventory instanceof PlayerInventory)) {
                 result.add(slot);
             }
-        }
-        return result;
-    }
-
-    /** Основной инвентарь игрока (27 слотов, без хотбара и брони). */
-    private static List<Slot> playerSlots(ScreenHandler handler) {
-        List<Slot> all = new ArrayList<>();
-        for (Slot slot : handler.slots) {
-            if (slot.inventory instanceof PlayerInventory) {
-                all.add(slot);
-            }
-        }
-        List<Slot> result = new ArrayList<>();
-        if (handler instanceof PlayerScreenHandler) {
-            // В окне инвентаря основной инвентарь - слоты 9..35.
-            for (Slot slot : all) {
-                if (slot.id >= 9 && slot.id <= 35) result.add(slot);
-            }
-        } else {
-            // В окне контейнера сначала идут 27 слотов инвентаря, потом 9 слотов хотбара.
-            result.addAll(all.subList(0, Math.min(27, all.size())));
         }
         return result;
     }
