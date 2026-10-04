@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.chestsorter.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "HandledScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

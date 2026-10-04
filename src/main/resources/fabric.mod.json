@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "chestsorter",
+  "version": "${version}",
+  "name": "Chest Sorter",
+  "description": "Кнопка «S» в сундуках и инвентаре: объединяет одинаковые предметы в стаки и сортирует содержимое.",
+  "authors": ["You"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.chestsorter.ChestSorterClient"]
+  },
+  "mixins": ["chestsorter.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}
